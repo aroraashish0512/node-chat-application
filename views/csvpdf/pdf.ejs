@@ -1,0 +1,22 @@
+<!-- <form class="form-signin" enctype="multipart/form-data" method="POST" action="/csv/csv"> -->
+
+<form class="form-signin" method="POST">
+
+<ul>
+    <% if (errors) { %>
+  <% errors.forEach(function(msgObj){ %>
+    <li class="alert alert-danger"><%= msgObj.msg %> says: <%= msgObj.msg %></li>
+  <% }) } %>
+</ul>
+        <h2 class="form-signin-heading">Sign in</h2>
+        <label for="filename" class="sr-only">File Name</label>
+        <input type="text" name="filename" id="filename" class="form-control" placeholder="File Name" autofocus>
+        <label for="content" class="sr-only">Content</label>
+        <textarea name="content" id="content" placeholder="Enter Content" rows="10" cols="80"></textarea>
+
+        <!-- <input type="text" name="ab[]" class="form-control" placeholder="Name 1">
+        <input type="text" name="ab[]" class="form-control" placeholder="Name 2">
+        <input type="text" name="ab[]" class="form-control" placeholder="Name 3"> -->
+        
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Generate PDF</button>
+      </form>

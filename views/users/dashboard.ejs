@@ -1,0 +1,42 @@
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">Welcome
+                    <%- username %>
+                </div>
+                <div class="panel-body">
+                    <div class="col-xs-4">
+                        <div class="panel-group">
+                            <div class="panel panel-default">
+                                <div id="collapse1" class="panel-collapse">
+                                    <!-- <ul class="list-group">
+                                        <li class="list-group-item"><a href="/users/address">Add Address</a></li>
+                                        <li class="list-group-item"><a href="/users/addresslist">Address List</a></li>
+                                    </ul>-->
+
+                                    <ul class="list-group">
+                                        <% users.forEach(function(ud){ %>
+                                            <li data-user="<%= ud._id %>" class="list-group-item"><%= ud.fname %> <%= ud.lname %></li>
+                                        <% }) %>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <%- messages.info %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    ul.list-group li {
+        cursor: pointer;
+    }
+
+</style>

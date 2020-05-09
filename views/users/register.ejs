@@ -1,0 +1,91 @@
+
+<ul>
+    <% if (errors) { %>
+    <% errors.forEach(function(msgObj){ %>
+    <li><%= msgObj.msg %> says: <%= msgObj.msg %></li>
+    <% }) } %>
+</ul>
+
+
+<form class="form-horizontal" id="registerHere" method='POST' action='/users/pregister'>
+    <fieldset>
+        <legend>Registration</legend>
+
+        <div class="control-group">
+            <label class="control-label">Name</label>
+            <div class="controls">
+                <input type="text" class="input-xlarge" id="name" name="name" data-content="Enter your Name" data-original-title="Name" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Email</label>
+            <div class="controls">
+                <input type="text" class="input-xlarge" id="usermail" name="usermail" data-content="Enter your Email" data-original-title="Email" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Username</label>
+            <div class="controls">
+                <input type="text" class="input-xlarge" id="username" name="username" data-content="Enter your Username" data-original-title="Username" />
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label">Password</label>
+            <div class="controls">
+                <input type="password" class="input-xlarge" id="password" name="password" data-content="Enter your Password" data-original-title="Password" />
+            </div>
+        </div>
+
+        .............
+        .............
+
+        <div class="control-group">
+            <label class="control-label"></label>
+            <div class="controls">
+                <button type="submit" class="btn btn-success" >Create My Account</button>
+            </div>
+        </div>
+
+    </fieldset>
+</form>
+
+<input type="button" name="ajax" id="ajax" value="send ajax"/>
+
+
+
+<script type="text/javascript">
+
+    $("#ajax").click(function (e) {
+        var value = $(this).val();
+        $.ajax({
+            headers: {"Access-Control-Allow-Origin": "http://localhost:3000/"},
+            url: "http://localhost/laravel/public/checkcsrf",
+            dataType: 'json', // Notice! JSONP <-- P (lowercase)
+            crossDomain: true,
+            success: function (json) {
+                // do stuff with json (in this case an array)
+                console.log(json);
+            },
+            error: function () {
+                alert("Error");
+            }
+        });
+    });
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

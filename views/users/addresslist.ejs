@@ -1,0 +1,45 @@
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">Address List
+                </div>
+                <div class="panel-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>City</th>
+                                <th>Zip</th>
+                                <th>Address</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% userdetails.address.forEach(function(ud){ %>
+                            <tr>
+                                <td>
+                                    <%= ud.state %>
+                                </td>
+                                <td>
+                                    <%= ud.city %>
+                                </td>
+                                <td>
+                                    <%= ud.zip %>
+                                </td>
+                                <td>
+                                    <%= ud.address %>
+                                </td>
+                                <td>
+                                    <%= ud._id %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

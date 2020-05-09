@@ -1,0 +1,30 @@
+<form class="form-signin" enctype="multipart/form-data" method="POST" action="/users/login">
+
+<!-- <form class="form-signin" method="POST" action="/users/login"> -->
+<ul>
+    <% if (errors) { %>
+  <% errors.forEach(function(msgObj){ %>
+    <li class="alert alert-danger"><%= msgObj.msg %> says: <%= msgObj.msg %></li>
+  <% }) } %>
+</ul>
+        <h2 class="form-signin-heading">Sign in</h2>
+        <label for="uemail" class="sr-only">Email address</label>
+        <input type="text" name="uemail" id="uemail" class="form-control" placeholder="Email address" autofocus>
+        <label for="upassword" class="sr-only">Password</label>
+        <input type="password" name="upassword" id="upassword" class="form-control" placeholder="Password">
+
+        <input type="file" name="imagef[]" id="image1" class="form-control" />
+        <input type="file" name="imagef[]" id="image2" class="form-control" />
+        <input type="file" name="imagef[]" id="image3" class="form-control" />
+
+        <input type="text" name="ab[]" class="form-control" placeholder="Name 1">
+        <input type="text" name="ab[]" class="form-control" placeholder="Name 2">
+        <input type="text" name="ab[]" class="form-control" placeholder="Name 3">
+        
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      </form>
