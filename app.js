@@ -28,26 +28,24 @@ server.listen(9898);
 
 const socketUser = require('./model/SocketUser');
 
+const sockets = {};
 io.on('connection', function (socket) {
-  /* var usersList = Array(); */
-  console.log("a user connected");
-
-  /*socket.on('disconnect', function(){
-    console.log("User disconnected");
-  }); */
-
-  /* usersList[socket.id] = socket.id;
-  console.log(usersList); */
-  var cookief = socket.handshake.headers.cookie;
-
-  //var cookies = cookieParser.parse(socket.handshake.headers.cookie);
-
-  console.log(cookief);
+  console.log('user connected');
+  console.log(socket);
+  sockets[socket.id] = socket;
+  console.log(Object.keys(sockets).length);
   socket.on('simplechat', function (msg) {
     io.sockets.emit('simplechat', msg);
   });
 
+  socket.on('disconnect', function(){
+    console.log('-------disconencted <br/>');
+    delete sockets[socket.id];
+    console.log(Object.keys(sockets).length);
+  });
+
 });
+
 
 var sessionStore = new expressSession.MemoryStore;
 

@@ -76,27 +76,22 @@
         <script src="/javascripts/jquery.min.js"></script>
         <script src="/javascripts/bootstrap.min.js"></script>
 
-        <!-- <script src="http://localhost:8989/socket.io/socket.io.js"></script> -->
-        <!-- <script>
-            /* var socket = io.connect('http://localhost:8989/');
-            socket.on('news', function (data) {
-                socket.emit('my other event', { my: 'ashish kumar' });
-            }); */
-
-            /* $(document).ready(function () {
-                var socket = io.connect("http://localhost:8989/");
+        <script src="http://localhost:9898/socket.io/socket.io.js"></script> -->
+        <script>
+            $(document).ready(function () {
+                var socket = io.connect("http://localhost:9898/");
                 $('#form').submit(function (e) {
                     e.preventDefault();
                     socket.emit('simplechat', $('#m').val());
+                    console.log('ashish');
                     $('#m').val('');
-                    //return false;
                 });
                 socket.on('simplechat', function (msg) {
-                    alert(msg);
+                    console.log(msg, '84');
                     $('#messages').append('<li>'+msg+'</li>');
                 });
-            }); */
-        </script> -->
+            });
+        </script>
 
 </body>
 
