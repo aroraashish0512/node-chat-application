@@ -27,21 +27,29 @@ var io = require('socket.io')(server);
 server.listen(9898);
 
 const socketUser = require('./model/SocketUser');
+var os = require( 'os' );
+
+var networkInterfaces = os.networkInterfaces();
 
 const sockets = {};
 io.on('connection', function (socket) {
-  console.log('user connected');
-  console.log(socket);
+  console.log(networkInterfaces, '33');
+  if (networkInterfaces['Wi-Fi'] && networkInterfaces['Wi-Fi'].length > 0) {
+    console.log(networkInterfaces['Wi-Fi'][networkInterfaces['Wi-Fi'].length - 1]);
+  }
+  // console.log('user connected');
+  // console.log(socket);
   sockets[socket.id] = socket;
-  console.log(Object.keys(sockets).length);
+  // console.log(sockets, '36');
+  // console.log(Object.keys(sockets).length, '37');
   socket.on('simplechat', function (msg) {
     io.sockets.emit('simplechat', msg);
   });
 
   socket.on('disconnect', function(){
-    console.log('-------disconencted <br/>');
+    // console.log('-------disconencted <br/>');
     delete sockets[socket.id];
-    console.log(Object.keys(sockets).length);
+    // console.log(Object.keys(sockets).length);
   });
 
 });

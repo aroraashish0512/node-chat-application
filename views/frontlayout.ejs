@@ -76,10 +76,10 @@
         <script src="/javascripts/jquery.min.js"></script>
         <script src="/javascripts/bootstrap.min.js"></script>
 
-        <script src="http://localhost:9898/socket.io/socket.io.js"></script> -->
+        <script src="http://192.168.43.165:9898/socket.io/socket.io.js"></script> -->
         <script>
             $(document).ready(function () {
-                var socket = io.connect("http://localhost:9898/");
+                var socket = io.connect("http://192.168.43.165:9898/");
                 $('#form').submit(function (e) {
                     e.preventDefault();
                     socket.emit('simplechat', $('#m').val());
