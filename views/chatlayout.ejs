@@ -81,31 +81,6 @@
         <script>
             $(document).ready(function () {
                 var socket = io.connect("http://192.168.43.165:9898/");
-                $('#m').keyup(function () {
-                    console.log('typing');
-                    typing = true;
-                    socket.emit('typing', { message: $('#m').val(), username: 'someone' });
-                    
-                });
-                socket.on('typing', (data) => {
-                    if (data.username && data.message) {
-                        $('#m').attr('placeholder', (`${data.username} is typing...`));
-                    } else {
-                        $('#m').attr('placeholder', '');
-                    }
-                })
-                $('#form').submit(function (e) {
-                    e.preventDefault();
-                    socket.emit('simplechat', $('#m').val());
-                    console.log('form submit');
-                    $('#m').val('');
-                    socket.emit('typing', { message: $('#m').val(), username: 'someone' });
-                });
-                socket.on('simplechat', function (msg) {
-                    console.log(msg, '84');
-                    $('#messages').append('<li>' + msg + '</li>');
-                });
-
                 socket.on('totalClients', function (msg) {
                     console.log(msg, '110');
                 });

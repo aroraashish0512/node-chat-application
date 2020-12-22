@@ -55,10 +55,11 @@ io.on('connection', function (socket) {
   if (!$ipsConnected.hasOwnProperty($ipAddress)) {
   	$ipsConnected[$ipAddress] = 1;
   	count++;
-  	socket.emit('counter', {count:count});
+  	socket.emit('totalClients', {count:count});
   }
   console.log("client is connected");
   console.log($ipsConnected, '61');
+  console.log(io.engine.clientsCount, 'totalCount');
   
   /* Disconnect socket */
 
@@ -68,7 +69,7 @@ io.on('connection', function (socket) {
       count--;
       console.log('user disconnect from the application');
       console.log($ipsConnected, '70');
-	    socket.emit('counter', {count:count});
+	    socket.emit('totalClients', {count:count});
   	}
   });
 
