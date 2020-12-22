@@ -31,27 +31,57 @@ var os = require( 'os' );
 
 var networkInterfaces = os.networkInterfaces();
 
-const sockets = {};
+// const sockets = {};
+// io.on('connection', function (socket) {
+//   if (networkInterfaces['Wi-Fi'] && networkInterfaces['Wi-Fi'].length > 0) {
+//     // console.log(networkInterfaces['Wi-Fi'][networkInterfaces['Wi-Fi'].length - 1]);
+//   }
+//   sockets[socket.id] = socket;
+//   console.log(socket.handshake.address, '43');
+//   socket.on('simplechat', function (msg) {
+//     io.sockets.emit('simplechat', msg);
+//   });
+
+//   socket.on('disconnect', function(){
+//     delete sockets[socket.id];
+//   });
+
+// });
+
+const $ipsConnected = [];
+var count = 0;
 io.on('connection', function (socket) {
-  console.log(networkInterfaces, '33');
-  if (networkInterfaces['Wi-Fi'] && networkInterfaces['Wi-Fi'].length > 0) {
-    console.log(networkInterfaces['Wi-Fi'][networkInterfaces['Wi-Fi'].length - 1]);
+  var $ipAddress = socket.handshake.address;
+  if (!$ipsConnected.hasOwnProperty($ipAddress)) {
+  	$ipsConnected[$ipAddress] = 1;
+  	count++;
+  	socket.emit('counter', {count:count});
   }
-  // console.log('user connected');
-  // console.log(socket);
-  sockets[socket.id] = socket;
-  // console.log(sockets, '36');
-  // console.log(Object.keys(sockets).length, '37');
+  console.log("client is connected");
+  console.log($ipsConnected, '61');
+  
+  /* Disconnect socket */
+
+  socket.on('disconnect', function() {
+  	if ($ipsConnected.hasOwnProperty($ipAddress)) {
+  		delete $ipsConnected[$ipAddress];
+      count--;
+      console.log('user disconnect from the application');
+      console.log($ipsConnected, '70');
+	    socket.emit('counter', {count:count});
+  	}
+  });
+
+  socket.on('typing', (data)=>{
+    if(data.typing==true)
+       io.emit('typing', data)
+    else
+       io.emit('typing', data)
+  })
+
   socket.on('simplechat', function (msg) {
     io.sockets.emit('simplechat', msg);
   });
-
-  socket.on('disconnect', function(){
-    // console.log('-------disconencted <br/>');
-    delete sockets[socket.id];
-    // console.log(Object.keys(sockets).length);
-  });
-
 });
 
 
@@ -87,7 +117,7 @@ app.use('/manageiostream', csvpdf);
 
 
 
-mongoose.connect('mongodb://localhost/chatapplication');
+// mongoose.connect('mongodb://localhost/chatapplication');
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

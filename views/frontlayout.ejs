@@ -29,7 +29,8 @@
             <div class="navbar-header">
 
                 <!-- Collapsed Hamburger -->
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#app-navbar-collapse">
                     <span class="sr-only">Toggle Navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -76,19 +77,33 @@
         <script src="/javascripts/jquery.min.js"></script>
         <script src="/javascripts/bootstrap.min.js"></script>
 
-        <script src="http://192.168.43.165:9898/socket.io/socket.io.js"></script> -->
+        <script src="http://192.168.1.5:9898/socket.io/socket.io.js"></script> -->
         <script>
             $(document).ready(function () {
-                var socket = io.connect("http://192.168.43.165:9898/");
+                var socket = io.connect("http://192.168.1.5:9898/");
+                $('#m').keyup(function () {
+                    console.log('typing');
+                    typing = true;
+                    socket.emit('typing', { message: $('#m').val(), username: 'someone' });
+                    
+                });
+                socket.on('typing', (data) => {
+                    if (data.username && data.message) {
+                        $('#m').attr('placeholder', (`${data.username} is typing...`));
+                    } else {
+                        $('#m').attr('placeholder', '');
+                    }
+                })
                 $('#form').submit(function (e) {
                     e.preventDefault();
                     socket.emit('simplechat', $('#m').val());
-                    console.log('ashish');
+                    console.log('form submit');
                     $('#m').val('');
+                    socket.emit('typing', { message: $('#m').val(), username: 'someone' });
                 });
                 socket.on('simplechat', function (msg) {
                     console.log(msg, '84');
-                    $('#messages').append('<li>'+msg+'</li>');
+                    $('#messages').append('<li>' + msg + '</li>');
                 });
             });
         </script>
