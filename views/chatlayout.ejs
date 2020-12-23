@@ -11,6 +11,7 @@
     </title>
 
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" />
+    <link href="/stylesheets/chat.css" rel="stylesheet" />
     <!-- <link href="/stylesheets/font-awesome.min.css" rel="stylesheet" /> -->
     <style>
         body {
@@ -70,19 +71,79 @@
             </div>
         </div>
     </nav>
-
+<div id="totaluser"></div>
     <%- body %>
 
+        <ul id="onlineusers">
 
+        </ul>
+        <div id="chatwindow">
+
+        </div>
+        <div id="currentUser">
+
+        </div>
+        
         <script src="/javascripts/jquery.min.js"></script>
         <script src="/javascripts/bootstrap.min.js"></script>
 
-        <script src="http://192.168.43.165:9898/socket.io/socket.io.js"></script> -->
+        <script src="http://192.168.1.3:9898/socket.io/socket.io.js"></script> -->
         <script>
             $(document).ready(function () {
-                var socket = io.connect("http://192.168.43.165:9898/");
+                var socket = io.connect("http://192.168.1.3:9898/");
+
                 socket.on('totalClients', function (msg) {
-                    console.log(msg, '110');
+                    currentUser = msg.currentUser;
+                    $('#currentUser').text(currentUser);
+                    window.console.log(currentUser, 'currentUser');
+                    $('#totaluser').text(`Total Users are ${msg['allClients'].length} currently`);
+                    msg['allClients'].forEach(e => {
+                        console.log(e, '89');
+                        if (currentUser !== e) {
+                            $("#onlineusers").append($("<li attr-socket=`${e}`>").text(`${e}`));
+                        }
+                    });
+                });
+
+                $('#onlineusers').on('click', 'li', function() {
+                    const liText = $(this).text();
+                    if (!$("#"+liText+"").length) {
+                        $("#chatwindow").append($("<div id='"+liText+"'>"));
+                        $(".chatform").clone().appendTo("#"+liText+"");
+                        // $(document).find("form").trigger("create")
+                    } else {
+                        console.log('chat box already opened for this user');
+                    }
+                });
+
+                $('#chatwindow').on('submit', 'form', function(e) {
+                    e.preventDefault();
+                    const serializeForm = $( this ).serializeArray();
+                    console.log(serializeForm[0].value, '113');
+                    const receiverUser = $(this).parent().parent().attr('id');
+                    window.console.log(currentUser, 'currentUser');
+                    // socket.emit('typing', { message: $('#m').val(), username: 'someone' });
+                    socket.emit('simplechat', { 
+                        message: serializeForm[0].value,
+                        sender: currentUser,
+                        receiver: receiverUser
+                    });
+                });
+                socket.on('simplechat', function (msg) {
+                    console.log(msg, '84');
+                    // $('#messages').append('<li>' + msg.message + '</li>');
+                    if (msg.receiver === currentUser || msg.sender === currentUser) {
+                        $('#messages').append(`<li> i am a ${msg.receiver === currentUser ? 'receiver:': 'sender:'} sent you a message ${msg.message}</li>`);
+                    }
+                });
+
+                $("#broadcastbtn").on('click', 'span', function() {
+                    console.log('broadcast button');
+                    socket.emit('broadcastmessage', "test broadcast");
+                });
+
+                socket.on('broadcastmessage', function (msg) {
+                    console.log(msg, '84');
                 });
             });
         </script>

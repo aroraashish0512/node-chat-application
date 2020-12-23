@@ -31,59 +31,73 @@ var os = require( 'os' );
 
 var networkInterfaces = os.networkInterfaces();
 
-// const sockets = {};
-// io.on('connection', function (socket) {
-//   if (networkInterfaces['Wi-Fi'] && networkInterfaces['Wi-Fi'].length > 0) {
-//     // console.log(networkInterfaces['Wi-Fi'][networkInterfaces['Wi-Fi'].length - 1]);
-//   }
-//   sockets[socket.id] = socket;
-//   console.log(socket.handshake.address, '43');
-//   socket.on('simplechat', function (msg) {
-//     io.sockets.emit('simplechat', msg);
-//   });
-
-//   socket.on('disconnect', function(){
-//     delete sockets[socket.id];
-//   });
-
-// });
-
-const $ipsConnected = [];
-var count = 0;
+const sockets = {};
 io.on('connection', function (socket) {
-  var $ipAddress = socket.handshake.address;
-  if (!$ipsConnected.hasOwnProperty($ipAddress)) {
-  	$ipsConnected[$ipAddress] = 1;
-  	count++;
-  	socket.emit('totalClients', {count:count});
+  if (networkInterfaces['Wi-Fi'] && networkInterfaces['Wi-Fi'].length > 0) {
+    // console.log(networkInterfaces['Wi-Fi'][networkInterfaces['Wi-Fi'].length - 1]);
   }
-  console.log("client is connected");
-  console.log($ipsConnected, '61');
-  console.log(io.engine.clientsCount, 'totalCount');
-  
-  /* Disconnect socket */
-
-  socket.on('disconnect', function() {
-  	if ($ipsConnected.hasOwnProperty($ipAddress)) {
-  		delete $ipsConnected[$ipAddress];
-      count--;
-      console.log('user disconnect from the application');
-      console.log($ipsConnected, '70');
-	    socket.emit('totalClients', {count:count});
-  	}
-  });
-
-  socket.on('typing', (data)=>{
-    if(data.typing==true)
-       io.emit('typing', data)
-    else
-       io.emit('typing', data)
-  })
-
+  sockets[socket.id] = socket;
+  console.log(socket.handshake.address, '43');
+  socket.emit('totalClients', {allClients:Object.keys(sockets), currentUser: socket.id});
   socket.on('simplechat', function (msg) {
     io.sockets.emit('simplechat', msg);
   });
+
+  socket.on('disconnect', function(){
+    delete sockets[socket.id];
+    socket.emit('totalClients', {allClients:Object.keys(sockets)});
+  });
+
+  socket.on('simplechat', function (msg) {
+    // io.sockets.emit('simplechat', msg);
+    io.sockets.to(msg.receiver).emit('simplechat', msg);
+  });
+
+  socket.on('broadcastmessage', function (msg) {
+    socket.broadcast.emit("broadcastmessage", msg);
+    console.log(msg, 'broadcast');
+  });
+
+
+
 });
+
+// const $ipsConnected = [];
+// var count = 0;
+// io.on('connection', function (socket) {
+//   var $ipAddress = socket.handshake.address;
+//   if (!$ipsConnected.hasOwnProperty($ipAddress)) {
+//   	$ipsConnected[$ipAddress] = 1;
+//   	count++;
+//   	socket.emit('totalClients', {count:count});
+//   }
+//   console.log("client is connected");
+//   console.log($ipsConnected, '61');
+//   console.log(io.engine.clientsCount, 'totalCount');
+  
+//   /* Disconnect socket */
+
+//   socket.on('disconnect', function() {
+//   	if ($ipsConnected.hasOwnProperty($ipAddress)) {
+//   		delete $ipsConnected[$ipAddress];
+//       count--;
+//       console.log('user disconnect from the application');
+//       console.log($ipsConnected, '70');
+// 	    socket.emit('totalClients', {count:count});
+//   	}
+//   });
+
+//   socket.on('typing', (data)=>{
+//     if(data.typing==true)
+//        io.emit('typing', data)
+//     else
+//        io.emit('typing', data)
+//   })
+
+//   socket.on('simplechat', function (msg) {
+//     io.sockets.emit('simplechat', msg);
+//   });
+// });
 
 
 var sessionStore = new expressSession.MemoryStore;

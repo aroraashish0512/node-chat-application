@@ -27,6 +27,6 @@
     "password-hash": "^1.2.2",
     "pdfkit": "^0.8.3",
     "serve-favicon": "~2.3.0",
-    "socket.io": "^2.0.3"
+    "socket.io": "^2.3.0"
   }
 }
